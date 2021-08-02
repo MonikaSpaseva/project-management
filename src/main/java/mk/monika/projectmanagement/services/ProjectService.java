@@ -1,6 +1,7 @@
 package mk.monika.projectmanagement.services;
 
 import mk.monika.projectmanagement.dto.ProjectStage;
+import mk.monika.projectmanagement.dto.TimeChartData;
 import mk.monika.projectmanagement.entities.Employee;
 import mk.monika.projectmanagement.entities.Project;
 import mk.monika.projectmanagement.repository.IProjectRepository;
@@ -28,11 +29,14 @@ public class ProjectService {
     }
 
     public Project findByProjectId(Long id) {
-
         return projectRepository.findByProjectId(id);
     }
+    public void delete(Project theProject) {
+        projectRepository.delete(theProject);
+    }
 
-    public void delete(Project theProject) {projectRepository.delete(theProject);
+    public List<TimeChartData> getTimeData(){
+        return projectRepository.getTimeData();
     }
 }
 

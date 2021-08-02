@@ -1,5 +1,8 @@
 package mk.monika.projectmanagement.controllers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import mk.monika.projectmanagement.dto.TimeChartData;
 import mk.monika.projectmanagement.entities.Employee;
 import mk.monika.projectmanagement.entities.Project;
 import mk.monika.projectmanagement.repository.IEmployeeRepo;
@@ -20,7 +23,7 @@ import java.util.List;
 public class ProjectController {
 
     @Autowired
-     ProjectService projectService;
+    ProjectService projectService;
     @Autowired
     EmployeeService employeeService;
 
@@ -69,5 +72,19 @@ public class ProjectController {
         Project theProject = projectService.findByProjectId(id);
         projectService.delete(theProject);
         return "redirect:/projects";
+    }
+
+    @GetMapping("/timelines")
+    public String displayProjectTimelines(Model model) throws JsonProcessingException {
+
+        List<TimeChartData> timelineData = projectService.getTimeData();
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        String jsonTimelineString = objectMapper.writeValueAsString(timelineData);
+
+        System.out.println(jsonTimelineString);
+
+        model.addAttribute("projectTimeList", jsonTimelineString);
+        return "projects/project-timelines";
     }
 }
