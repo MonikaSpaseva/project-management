@@ -1,6 +1,7 @@
 package mk.monika.projectmanagement.services;
 
 import mk.monika.projectmanagement.dto.ProjectStage;
+import mk.monika.projectmanagement.entities.Employee;
 import mk.monika.projectmanagement.entities.Project;
 import mk.monika.projectmanagement.repository.IProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,11 +19,20 @@ public class ProjectService {
         return projectRepository.save(project);
     }
 
-    public List<Project> getAll(){
+    public Iterable<Project> getAll(){
         return projectRepository.findAll();
     }
 
     public List<ProjectStage> getProjectStage() {
         return projectRepository.projectStage();
     }
+
+    public Project findByProjectId(Long id) {
+
+        return projectRepository.findByProjectId(id);
+    }
+
+    public void delete(Project theProject) {projectRepository.delete(theProject);
+    }
 }
+

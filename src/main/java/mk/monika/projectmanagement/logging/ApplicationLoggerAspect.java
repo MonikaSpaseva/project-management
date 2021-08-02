@@ -17,16 +17,9 @@ public class ApplicationLoggerAspect {
 
     @Pointcut("within(mk.monika.projectmanagement.controllers..*)")
     public void definePackagePointcuts(){
-        // empty method just to name the location specified in the point cut
     }
 
-//    @After("definePackagePointcuts()")
-//    public void logAfter(JoinPoint jp){
-//        log.debug("\n \n \n");
-//        log.debug("*********** After Method Execution ********* \n {}.{} () with argument[s] = {}", jp.getSignature().getDeclaringTypeName(), jp.getSignature().getName(), Arrays.toString(jp.getArgs()));
-//        log.debug("_______________________________________________________________ \n \n \n");
-//
-//    }
+
 
     @Around("definePackagePointcuts()")
     public Object logAround(ProceedingJoinPoint jp) throws Throwable {

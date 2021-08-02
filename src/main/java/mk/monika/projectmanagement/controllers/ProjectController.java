@@ -9,8 +9,10 @@ import mk.monika.projectmanagement.services.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -18,15 +20,13 @@ import java.util.List;
 public class ProjectController {
 
     @Autowired
-//    IProjectRepository projectRepository;
      ProjectService projectService;
     @Autowired
-//    IEmployeeRepo employeeRepo;
     EmployeeService employeeService;
 
     @GetMapping
     public String displayProjects(Model model) {
-        List<Project> projects = projectService.getAll();
+        Iterable<Project> projects = projectService.getAll();
         model.addAttribute("projects", projects);
         return "projects/list-projects";
     }
@@ -35,7 +35,7 @@ public class ProjectController {
     public String displayProjectForm(Model model) {
         Project aProject = new Project();
 
-        List<Employee> employees = employeeService.getAll();
+        Iterable<Employee> employees = employeeService.getAll();
 
         model.addAttribute("project", aProject);
         model.addAttribute("allEmployees", employees);
@@ -44,18 +44,30 @@ public class ProjectController {
     }
 
     @PostMapping("/save")
-    public String createProject(Project project, Model model) {
-        // this should handle saving to the database...
+    public String createProject(Model model, @Valid Project project, Errors errors) {
+        if (errors.hasErrors()) {
+            Iterable<Employee> employees = employeeService.getAll();
+            model.addAttribute("project", project);
+            model.addAttribute("allEmployees", employees);
+
+            return "projects/new-project";
+        }
         projectService.save(project);
 
-        //  Iterable<Employee>chosenEmployees = employeeRepo.findAllById(employees);
+        return "redirect:/projects";
+    }
 
-//        for (Employee employee : chosenEmployees) {
-//            employee.setProjects(project);
-//            employeeRepo.save(employee);
-//        }
+    @GetMapping("/update")
+    public String update(@RequestParam("id") Long id, Model model) {
+        Project theProject = projectService.findByProjectId(id);
+        model.addAttribute("project", theProject);
+        return "projects/new-project";
+    }
 
-        // use a redirect to prevent duplicate submissions
-        return "redirect:/projects/new";
+    @GetMapping("/delete")
+    public String delete(@RequestParam("id") Long id, Model model) {
+        Project theProject = projectService.findByProjectId(id);
+        projectService.delete(theProject);
+        return "redirect:/projects";
     }
 }

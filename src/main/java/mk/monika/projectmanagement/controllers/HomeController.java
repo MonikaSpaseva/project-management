@@ -30,7 +30,7 @@ public class HomeController {
         Map<String, Object> map = new HashMap<>();
 
 
-        List<Project> projectList = projectRepository.findAll();
+        Iterable<Project> projectList = projectRepository.findAll();
         List<EmployeeProject> employeesProjectCount = employeeRepo.employeeProjects();
         model.addAttribute("projectList", projectList);
         model.addAttribute("employeesListProjectsCount", employeesProjectCount);

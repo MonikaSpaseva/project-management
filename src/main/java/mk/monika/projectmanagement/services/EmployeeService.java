@@ -18,11 +18,20 @@ public class EmployeeService {
         return employeeRepo.save(employee);
     }
 
-    public List<Employee> getAll(){
+    public Iterable<Employee> getAll(){
         return  employeeRepo.findAll();
     }
 
     public List<EmployeeProject> employeeProjects(){
         return  employeeRepo.employeeProjects();
+    }
+
+    public Employee findByEmployeeId(Long id) {
+
+        return employeeRepo.findByEmployeeId(id);
+    }
+
+    public void delete(Employee theEmp) {
+        employeeRepo.delete(theEmp);
     }
 }

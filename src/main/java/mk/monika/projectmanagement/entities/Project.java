@@ -1,19 +1,23 @@
 package mk.monika.projectmanagement.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 public class Project {
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "project_seq")
-//
     @SequenceGenerator(name = "project_seq", allocationSize = 1)
-//
-
     private long projectId;
+
+    @NotBlank(message = "Project name cannot be blank")
     private String name;
+
     private String stage; // Not started, completed, in progress
     private String description;
 
@@ -23,6 +27,7 @@ public class Project {
             joinColumns = @JoinColumn(name = "project_id"),
             inverseJoinColumns = @JoinColumn(name = "employee_id"))
 
+    @JsonIgnore
     private List<Employee> employees;
 
     public Project() {

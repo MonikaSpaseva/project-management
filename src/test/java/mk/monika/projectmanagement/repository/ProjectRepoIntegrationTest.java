@@ -16,6 +16,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.annotation.security.RunAs;
 
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+
 import static org.junit.Assert.assertEquals;
 
 //@ContextConfiguration(classes = Main.class)
@@ -33,6 +37,8 @@ public class ProjectRepoIntegrationTest {
         Project newProject = new Project("New Test Project", "COMPLETE", "Test Description");
         projectRepository.save(newProject);
 
-        assertEquals(5, projectRepository.findAll().size());
+        List<Project> projects = StreamSupport.stream(projectRepository.findAll().spliterator(), false)
+                .collect(Collectors.toList());
+        assertEquals(5, projects.size());
     }
 }

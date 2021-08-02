@@ -1,6 +1,13 @@
 package mk.monika.projectmanagement.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import mk.monika.projectmanagement.validation.UniqueValue;
+
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.List;
 
 @Entity
@@ -8,10 +15,19 @@ public class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "employee_seq")
     @SequenceGenerator(name = "employee_seq", allocationSize = 1)
-
     private long employeeId;
+
+    @NotBlank(message = "First name required!")
+    @Size(min = 2, max = 50, message = "Size must be between 2-50 characters long!")
     private String firstName;
+
+    @NotBlank(message = "Last name required!")
+    @Size(min = 1, max = 50, message = "Size must be between 1-50 characters long!")
     private String lastName;
+
+    @NotBlank(message = "Email required!")
+    @Email(message = "Enter valid email!")
+    @UniqueValue(message = "Email already exist!")
     private String email;
 
     @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST},
@@ -22,7 +38,7 @@ public class Employee {
             inverseJoinColumns = @JoinColumn(name = "project_id"))
 
 
-   // @JoinColumn(name = "project_id")
+    @JsonIgnore
     private List<Project> projects;
 
     public Employee() {
